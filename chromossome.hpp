@@ -20,4 +20,5 @@ class Chromossome
             vector<vector<int>> itens = {}
         );
         int get_fitness();
+        void show_fitness();
 };

@@ -22,3 +22,7 @@ int Chromossome::get_fitness() {
 
     return (this->total_size * this->total_benefit);
 }
+
+void Chromossome::show_fitness() {
+	cout << "Fitness: [" << this->get_fitness() << "]" << endl;
+}
