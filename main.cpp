@@ -75,20 +75,19 @@ Chromossome roulette_selection(vector<Chromossome*> &population) {
     int selected_position = 0;
     int random_number;
 
-    for (int i, fit = 0; i < population.size(); ++i)
+    for (int i = 0, fit = 0; i < population.size(); ++i)
     {
         fit = population[i]->get_fitness(BAG_SIZE);
         population_fitness.push_back(fit);
         total_population_benefit += fit;
     }
 
-    random_number = 0;
+    random_number = rand() % total_population_benefit;
 
     while (random_number > 0) {
         selected_position += 1;
         random_number -= population_fitness[selected_position - 1];
     }
-
 
     return *population[selected_position - 1];
 }
@@ -123,12 +122,16 @@ int main(int argc, char const *argv[])
         cout << bests.size() << endl;
     **/
 
-    roulette_selection(population);
-
     for (int i = 0; i < (POPULATION_SIZE - elitism_selecteds_size); ++i)
     {
-        //roulette_selected_population.push_back();
+        roulette_selected_population.push_back(
+            roulette_selection(population)
+        );
     }
+
+    /**
+        cout << roulette_selected_population.size() << endl;
+    **/
 
     return 0;
 }
