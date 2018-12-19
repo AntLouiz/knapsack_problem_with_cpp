@@ -89,8 +89,10 @@ int main(int argc, char const *argv[])
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
     bests_by_elitism = get_bests_by_elitism(population, elitism_selecteds_size);
 
-    cout << population.size() << endl;
-    cout << bests.size() << endl;
+    /**
+        cout << population.size() << endl;
+        cout << bests.size() << endl;
+    **/
 
     return 0;
 }
