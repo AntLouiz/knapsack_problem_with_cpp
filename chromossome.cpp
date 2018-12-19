@@ -4,7 +4,10 @@
 
 using namespace std;
 
-Chromossome::Chromossome(vector <int> new_value, vector<vector<int>> itens): value(new_value) {
+Chromossome::Chromossome(vector <int> new_value, int bag_size, vector<vector<int>> itens):
+value(new_value),
+bag_size(bag_size)
+{
 	for (int i = 0; i < this->value.size(); ++i)
 	{
 		if (this->value[i]) {
@@ -13,8 +16,8 @@ Chromossome::Chromossome(vector <int> new_value, vector<vector<int>> itens): val
 		}
 	}
 }
-float Chromossome::get_fitness(int bag_size) {
-    if (this->total_size > bag_size)
+int Chromossome::get_fitness() {
+    if (this->total_size > this->bag_size)
         return 0;
 
     return (this->total_size * this->total_benefit);

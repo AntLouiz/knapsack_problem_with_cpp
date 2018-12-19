@@ -42,7 +42,7 @@ Chromossome get_best(vector<Chromossome*> &population) {
 
     for (int i = 0; i < population.size(); ++i)
     {
-        if(population[i]->get_fitness(BAG_SIZE) > best.get_fitness(BAG_SIZE)) {
+        if(population[i]->get_fitness() > best.get_fitness()) {
             best = *population[i];
             best_index = i;
         }
@@ -77,7 +77,7 @@ Chromossome roulette_selection(vector<Chromossome*> &population) {
 
     for (int i = 0, fit = 0; i < population.size(); ++i)
     {
-        fit = population[i]->get_fitness(BAG_SIZE);
+        fit = population[i]->get_fitness();
         population_fitness.push_back(fit);
         total_population_benefit += fit;
     }
@@ -120,7 +120,7 @@ int main(int argc, char const *argv[])
 
     while(population.size() < POPULATION_SIZE) {
         chromossome_value = generate_random_values(MAX_ITENS);
-        population.push_back(new Chromossome(chromossome_value, itens));
+        population.push_back(new Chromossome(chromossome_value, BAG_SIZE, itens));
     }
 
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
