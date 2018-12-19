@@ -4,15 +4,7 @@
 
 using namespace std;
 
-Chromossome::Chromossome(vector <int> new_value): value(new_value) {
-	vector<vector<int>> itens = {
-		{1, 3},
-		{5, 10},
-		{3, 80},
-		{7, 10},
-		{9, 30}
-	};
-
+Chromossome::Chromossome(vector <int> new_value, vector<vector<int>> itens): value(new_value) {
 	for (int i = 0; i < this->value.size(); ++i)
 	{
 		if (this->value[i]) {

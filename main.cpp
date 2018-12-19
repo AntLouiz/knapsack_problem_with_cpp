@@ -101,6 +101,15 @@ int main(int argc, char const *argv[])
     vector <Chromossome> bests_by_elitism;
     vector <Chromossome> roulette_selected_population;
 
+    // EXAMPLE OF ITENS
+    vector<vector<int>> itens = {
+        {1, 3},
+        {5, 10},
+        {3, 80},
+        {7, 10},
+        {9, 30}
+    };
+
     vector <int> chromossome_value;
     Chromossome best_solution;
 
@@ -111,7 +120,7 @@ int main(int argc, char const *argv[])
 
     while(population.size() < POPULATION_SIZE) {
         chromossome_value = generate_random_values(MAX_ITENS);
-        population.push_back(new Chromossome(chromossome_value));
+        population.push_back(new Chromossome(chromossome_value, itens));
     }
 
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);

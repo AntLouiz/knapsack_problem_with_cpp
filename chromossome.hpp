@@ -13,6 +13,6 @@ class Chromossome
         vector <int> value;
         int total_benefit = 0;
         int total_size = 0;
-        Chromossome(vector <int> value = {});
+        Chromossome(vector <int> value = {}, vector<vector<int>> itens = {});
         float get_fitness(int bag_size);
 };
