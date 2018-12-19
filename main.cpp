@@ -67,12 +67,41 @@ vector<Chromossome> get_bests_by_elitism(vector<Chromossome*> &population, int e
 }
 
 
+Chromossome roulette_selection(vector<Chromossome*> &population) {
+    // Applying the roulette selection and return the selected Chromossome.
+
+    vector<int> population_fitness;
+    int total_population_benefit = 0;
+    int selected_position = 0;
+    int random_number;
+
+    for (int i, fit = 0; i < population.size(); ++i)
+    {
+        fit = population[i]->get_fitness(BAG_SIZE);
+        population_fitness.push_back(fit);
+        total_population_benefit += fit;
+    }
+
+    random_number = 0;
+
+    while (random_number > 0) {
+        selected_position += 1;
+        random_number -= population_fitness[selected_position - 1];
+    }
+
+
+    return *population[selected_position - 1];
+}
+
+
 int main(int argc, char const *argv[])
 {
     srand((unsigned)time(NULL));
 
     vector <Chromossome*> population;
     vector <Chromossome> bests_by_elitism;
+    vector <Chromossome> roulette_selected_population;
+
     vector <int> chromossome_value;
     Chromossome best_solution;
 
@@ -93,6 +122,13 @@ int main(int argc, char const *argv[])
         cout << population.size() << endl;
         cout << bests.size() << endl;
     **/
+
+    roulette_selection(population);
+
+    for (int i = 0; i < (POPULATION_SIZE - elitism_selecteds_size); ++i)
+    {
+        //roulette_selected_population.push_back();
+    }
 
     return 0;
 }
