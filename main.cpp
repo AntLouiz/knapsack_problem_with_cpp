@@ -15,7 +15,7 @@
 #endif
 
 #ifndef SELECTION_PERCENT
-    #define SELECTION_PERCENT 90
+    #define SELECTION_PERCENT 30
 #endif
 
 #ifndef BAG_SIZE
@@ -72,12 +72,12 @@ int main(int argc, char const *argv[])
     srand((unsigned)time(NULL));
 
     vector <Chromossome*> population;
-    vector <Chromossome> bests;
-
+    vector <Chromossome> bests_by_elitism;
     vector <int> chromossome_value;
+    Chromossome best_solution;
+
     int generation = 1;
     int elitism_selecteds_size;
-    Chromossome best_solution;
 
     cout << "Generating a initial valid population..." << endl;
 
@@ -87,7 +87,7 @@ int main(int argc, char const *argv[])
     }
 
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
-    bests = get_bests_by_elitism(population, elitism_selecteds_size);
+    bests_by_elitism = get_bests_by_elitism(population, elitism_selecteds_size);
 
     cout << population.size() << endl;
     cout << bests.size() << endl;
