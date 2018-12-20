@@ -3,11 +3,11 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include<algorithm>
+#include <algorithm>
 #include "./chromossome.cpp"
 
 #ifndef POPULATION_SIZE
-    #define POPULATION_SIZE 100
+    #define POPULATION_SIZE 10
 #endif
 
 #ifndef MAX_ITENS
@@ -197,6 +197,19 @@ int main(int argc, char const *argv[])
         cout << roulette_selected_population.size() << endl;
         **/
     }
+
+    //cout << roulette_selected_population.size() << endl;
+
+    std::size_t const half_size = roulette_selected_population.size() / 2;
+    vector<Chromossome> roulette_selected_x(
+        roulette_selected_population.begin(),
+        roulette_selected_population.begin() + half_size
+    );
+
+    vector<Chromossome> roulette_selected_y(
+        roulette_selected_population.begin() + half_size,
+        roulette_selected_population.end()
+    );
 
     return 0;
 }
