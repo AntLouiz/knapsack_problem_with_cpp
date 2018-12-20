@@ -7,7 +7,7 @@
 #include "./chromossome.cpp"
 
 #ifndef POPULATION_SIZE
-    #define POPULATION_SIZE 200
+    #define POPULATION_SIZE 100
 #endif
 
 #ifndef SELECTION_PERCENT
