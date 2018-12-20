@@ -22,6 +22,10 @@
     #define BAG_SIZE 80
 #endif
 
+#ifndef MAX_ITERATIONS
+    #define MAX_ITERATIONS 10
+#endif
+
 using namespace std;
 
 vector<int> generate_random_values(int max_itens) {
@@ -206,6 +210,8 @@ int main(int argc, char const *argv[])
         population.push_back(new Chromossome(chromossome_value, BAG_SIZE, itens));
     }
 
+    new_population = {};
+    roulette_selected_population = {};
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
     bests_by_elitism = get_bests_by_elitism(population, elitism_selecteds_size);
 
