@@ -20,7 +20,7 @@ bag_size(bag_size)
 }
 int Chromossome::get_fitness() {
     if (this->total_size > this->bag_size)
-        return 0;
+        return 1;
 
     return (this->total_size * this->total_benefit);
 }
