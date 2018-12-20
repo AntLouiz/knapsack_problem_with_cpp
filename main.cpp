@@ -170,6 +170,10 @@ int main(int argc, char const *argv[])
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
     bests_by_elitism = get_bests_by_elitism(population, elitism_selecteds_size);
 
+    // Adding the bests chooses of elitism to the new population
+    for (int i = 0; i < bests_by_elitism.size(); ++i)
+        new_population.push_back(bests_by_elitism[i]);
+
     for (int i = 0; i < (POPULATION_SIZE - elitism_selecteds_size); ++i)
     {
         roulette_selected_population.push_back(
@@ -230,6 +234,9 @@ int main(int argc, char const *argv[])
 
     if(separated_chromossome.size())
         new_population.push_back(separated_chromossome[0]);
+
+
+    cout << new_population.size() << endl;
 
     return 0;
 }
