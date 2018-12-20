@@ -35,7 +35,24 @@ vector<int> generate_random_values(int max_itens) {
     return value;
 }
 
-Chromossome get_best(vector<Chromossome*> &population) {
+Chromossome get_best(vector<Chromossome> population) {
+    Chromossome best;
+    int best_index = 0;
+
+    best = population[best_index];
+
+    for (int i = 0; i < population.size(); ++i)
+    {
+        if(population[i].get_fitness() > best.get_fitness()) {
+            best = population[i];
+            best_index = i;
+        }
+    }
+
+    return best;
+}
+
+Chromossome extract_best(vector<Chromossome*> &population) {
     Chromossome best;
     int best_index = 0;
     best = *population[best_index];
@@ -59,7 +76,7 @@ vector<Chromossome> get_bests_by_elitism(vector<Chromossome*> &population, int e
 
     for (int i = 0; i < elitism_value; ++i)
     {
-        best_solution = get_best(population);
+        best_solution = extract_best(population);
         bests.push_back(best_solution);
     }
 
@@ -151,7 +168,7 @@ int main(int argc, char const *argv[])
         {5, 10},
         {3, 80},
         {7, 10},
-        {9, 30}
+        {8, 30}
     };
 
     vector <int> chromossome_value;
@@ -235,8 +252,9 @@ int main(int argc, char const *argv[])
     if(separated_chromossome.size())
         new_population.push_back(separated_chromossome[0]);
 
+    best_solution = get_best(new_population);
 
-    cout << new_population.size() << endl;
+    best_solution.show_fitness();
 
     return 0;
 }
