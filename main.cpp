@@ -7,7 +7,7 @@
 #include "./chromossome.cpp"
 
 #ifndef POPULATION_SIZE
-    #define POPULATION_SIZE 10
+    #define POPULATION_SIZE 100
 #endif
 
 #ifndef MAX_ITENS
@@ -143,6 +143,7 @@ int main(int argc, char const *argv[])
     vector <Chromossome> bests_by_elitism;
     vector <Chromossome> roulette_selected_population;
     vector <Chromossome> separated_chromossome;
+    vector <Chromossome> new_population;
 
     // EXAMPLE OF ITENS
     vector<vector<int>> itens = {
@@ -198,9 +199,10 @@ int main(int argc, char const *argv[])
         **/
     }
 
-    //cout << roulette_selected_population.size() << endl;
+    int middle_size = roulette_selected_population.size() / 2;
 
-    std::size_t const half_size = roulette_selected_population.size() / 2;
+    std::size_t const half_size = middle_size;
+
     vector<Chromossome> roulette_selected_x(
         roulette_selected_population.begin(),
         roulette_selected_population.begin() + half_size
@@ -210,6 +212,24 @@ int main(int argc, char const *argv[])
         roulette_selected_population.begin() + half_size,
         roulette_selected_population.end()
     );
+
+    vector<Chromossome> sons;
+
+
+    for (int i = 0; i < middle_size; ++i)
+    {
+        sons = crossover(
+            roulette_selected_x[i],
+            roulette_selected_y[i],
+            itens
+        );
+
+        new_population.push_back(sons[0]);
+        new_population.push_back(sons[1]);
+    }
+
+    if(separated_chromossome.size())
+        new_population.push_back(separated_chromossome[0]);
 
     return 0;
 }
