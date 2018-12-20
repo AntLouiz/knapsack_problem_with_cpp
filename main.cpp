@@ -15,7 +15,7 @@
 #endif
 
 #ifndef SELECTION_PERCENT
-    #define SELECTION_PERCENT 30
+    #define SELECTION_PERCENT 25
 #endif
 
 #ifndef BAG_SIZE
@@ -93,6 +93,48 @@ Chromossome roulette_selection(vector<Chromossome*> &population) {
 }
 
 
+vector<int> generate_binary_mask() {
+    // Generate a binary mask to make the crossover values selection
+    vector<int> binary_mask;
+
+    for (int i = 0; i < MAX_ITENS; ++i)
+        binary_mask.push_back(rand() % 2);
+
+    return binary_mask;
+}
+
+
+vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> itens) {
+    // Make the crossover of two Chromossomes and returns they sons in a vector
+
+    vector<int> son1;
+    vector<int> son2;
+
+    vector<Chromossome> sons;
+
+    vector<int> binary_mask;
+
+    binary_mask = generate_binary_mask();
+
+    for (int i = 0; i < binary_mask.size(); ++i)
+    {
+        if(binary_mask[i]){
+            son1.push_back(x.value[i]);
+            son2.push_back(y.value[i]);
+        }
+        else {
+            son2.push_back(x.value[i]);
+            son1.push_back(y.value[i]);
+        }
+    }
+
+    sons.push_back(Chromossome(son1, BAG_SIZE, itens));
+    sons.push_back(Chromossome(son2, BAG_SIZE, itens));
+
+    return sons;
+}
+
+
 int main(int argc, char const *argv[])
 {
     srand((unsigned)time(NULL));
@@ -100,6 +142,7 @@ int main(int argc, char const *argv[])
     vector <Chromossome*> population;
     vector <Chromossome> bests_by_elitism;
     vector <Chromossome> roulette_selected_population;
+    vector <Chromossome> separated_chromossome;
 
     // EXAMPLE OF ITENS
     vector<vector<int>> itens = {
@@ -126,11 +169,6 @@ int main(int argc, char const *argv[])
     elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
     bests_by_elitism = get_bests_by_elitism(population, elitism_selecteds_size);
 
-    /**
-        cout << population.size() << endl;
-        cout << bests.size() << endl;
-    **/
-
     for (int i = 0; i < (POPULATION_SIZE - elitism_selecteds_size); ++i)
     {
         roulette_selected_population.push_back(
@@ -139,8 +177,26 @@ int main(int argc, char const *argv[])
     }
 
     /**
-        cout << roulette_selected_population.size() << endl;
+    cout << bests_by_elitism.size() << endl;
+    cout << roulette_selected_population.size() << endl;
     **/
+
+    // check if the population is impar and isolate a random chromossome
+    if (roulette_selected_population.size() % 2 != 0) {
+        int random_index = rand() % roulette_selected_population.size();
+
+        separated_chromossome.push_back(
+            roulette_selected_population[random_index]
+        );
+
+        roulette_selected_population.erase(
+            roulette_selected_population.begin() + random_index
+        );
+
+        /**
+        cout << roulette_selected_population.size() << endl;
+        **/
+    }
 
     return 0;
 }
