@@ -7,19 +7,11 @@
 #include "./chromossome.cpp"
 
 #ifndef POPULATION_SIZE
-    #define POPULATION_SIZE 200
-#endif
-
-#ifndef MAX_ITENS
-    #define MAX_ITENS 10
+    #define POPULATION_SIZE 100
 #endif
 
 #ifndef SELECTION_PERCENT
     #define SELECTION_PERCENT 10
-#endif
-
-#ifndef BAG_SIZE
-    #define BAG_SIZE 269
 #endif
 
 #ifndef MAX_ITERATIONS
@@ -118,18 +110,22 @@ Chromossome roulette_selection(vector<Chromossome*> &population) {
 }
 
 
-vector<int> generate_binary_mask() {
+vector<int> generate_binary_mask(int max_itens) {
     // Generate a binary mask to make the crossover values selection
     vector<int> binary_mask;
 
-    for (int i = 0; i < MAX_ITENS; ++i)
+    for (int i = 0; i < max_itens; ++i)
         binary_mask.push_back(rand() % 2);
 
     return binary_mask;
 }
 
 
-vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> itens) {
+vector<Chromossome> crossover(
+    Chromossome x,
+    Chromossome y,
+    vector<vector<int>> itens,
+    int bag_size) {
     // Make the crossover of two Chromossomes and returns they sons in a vector
 
     vector<int> son1_value;
@@ -142,7 +138,7 @@ vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> 
 
     vector<int> binary_mask;
 
-    binary_mask = generate_binary_mask();
+    binary_mask = generate_binary_mask(itens.size());
 
     for (int i = 0; i < binary_mask.size(); ++i)
     {
@@ -155,8 +151,8 @@ vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> 
             son1_value.push_back(y.value[i]);
         }
     }
-    son1 = Chromossome(son1_value, BAG_SIZE, itens);
-    son2 = Chromossome(son2_value, BAG_SIZE, itens);
+    son1 = Chromossome(son1_value, bag_size, itens);
+    son2 = Chromossome(son2_value, bag_size, itens);
 
     son1.mutate(MUTATION_PERCENT);
     son2.mutate(MUTATION_PERCENT);
@@ -171,7 +167,8 @@ vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> 
 void refresh_population(
     vector<Chromossome*> &population,
     vector<Chromossome> new_population,
-    vector<vector<int>> itens){
+    vector<vector<int>> itens,
+    int bag_size){
     for (int i = 0; i< population.size();i++) {
          delete (population[i]);
     }
@@ -182,7 +179,7 @@ void refresh_population(
     {
         Chromossome* new_chromossome = new Chromossome(
             new_population[i].value,
-            BAG_SIZE,
+            bag_size,
             itens
         );
         population.push_back(new_chromossome);
@@ -200,19 +197,20 @@ int main(int argc, char const *argv[])
     vector <Chromossome> separated_chromossome;
     vector <Chromossome> new_population;
 
-    // EXAMPLE OF ITENS
-    vector<vector<int>> itens = {
-        {55, 95},
-        {10, 4},
-        {47, 60},
-        {5, 32},
-        {4, 23},
-        {50, 72},
-        {8, 80},
-        {61, 62},
-        {85, 65},
-        {87, 46}
-    };
+    FILE *file;
+    vector <vector<int>> itens;
+    int weight, benefit;
+    int max_itens, bag_size;
+
+    if (!(file = fopen(argv[1], "r"))) {
+        exit(1);
+    }
+
+    fscanf(file, "%d %d", &max_itens, &bag_size);
+
+    while (fscanf(file, "%d %d", &weight, &benefit) > 0) {
+        itens.push_back({weight, benefit});
+    }
 
     vector <int> chromossome_value;
     Chromossome best_solution;
@@ -223,8 +221,8 @@ int main(int argc, char const *argv[])
     cout << "Generating a initial valid population..." << endl;
 
     while(population.size() < POPULATION_SIZE) {
-        chromossome_value = generate_random_values(MAX_ITENS);
-        population.push_back(new Chromossome(chromossome_value, BAG_SIZE, itens));
+        chromossome_value = generate_random_values(max_itens);
+        population.push_back(new Chromossome(chromossome_value, bag_size, itens));
     }
 
     while(generation <= MAX_ITERATIONS) {
@@ -279,7 +277,8 @@ int main(int argc, char const *argv[])
             sons = crossover(
                 roulette_selected_x[i],
                 roulette_selected_y[i],
-                itens
+                itens,
+                bag_size
             );
 
             new_population.push_back(sons[0]);
@@ -292,7 +291,7 @@ int main(int argc, char const *argv[])
         best_solution = get_best(new_population);
 
 
-        refresh_population(population, new_population, itens);
+        refresh_population(population, new_population, itens, bag_size);
 
         best_solution.show_fitness();
         generation++;
