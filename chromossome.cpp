@@ -22,7 +22,7 @@ int Chromossome::get_fitness() {
     if (this->total_size > this->bag_size)
         return 1;
 
-    return (this->total_size * this->total_benefit);
+    return this->total_size;
 }
 
 void Chromossome::mutate(float mutation_percent) {
