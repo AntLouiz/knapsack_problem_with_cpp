@@ -15,7 +15,7 @@
 #endif
 
 #ifndef SELECTION_PERCENT
-    #define SELECTION_PERCENT 25
+    #define SELECTION_PERCENT 10
 #endif
 
 #ifndef BAG_SIZE
@@ -285,6 +285,9 @@ int main(int argc, char const *argv[])
         best_solution.show_fitness();
         generation++;
     }
+
+
+    best_solution.show_value();
 
     return 0;
 }

@@ -21,4 +21,5 @@ class Chromossome
         );
         int get_fitness();
         void show_fitness();
+        void show_value();
 };

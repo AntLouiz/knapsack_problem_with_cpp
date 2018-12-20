@@ -23,6 +23,17 @@ int Chromossome::get_fitness() {
     return (this->total_size * this->total_benefit);
 }
 
+void Chromossome::show_value() {
+	cout << "[";
+	for (int i = 0; i < this->value.size(); ++i) {
+		cout << this->value[i];
+		if(i != this->value.size() - 1)
+			cout << ",";
+	}
+
+	cout << "]" << endl;
+}
+
 void Chromossome::show_fitness() {
 	cout << "Fitness: [" << this->get_fitness() << "]" << endl;
 }
