@@ -200,19 +200,26 @@ int main(int argc, char const *argv[])
     vector <Chromossome> separated_chromossome;
     vector <Chromossome> new_population;
 
-    // EXAMPLE OF ITENS
-    vector<vector<int>> itens = {
-        {55, 95},
-        {10, 4},
-        {47, 60},
-        {5, 32},
-        {4, 23},
-        {50, 72},
-        {8, 80},
-        {61, 62},
-        {85, 65},
-        {87, 46}
-    };
+    FILE *file;
+    vector <vector<int>> itens;
+    int weight, benefit;
+    int max_itens, bag_size;
+
+    if (!(file = fopen(argv[1], "r"))) {
+        exit(1);
+    }
+
+    fscanf(file, "%d %d", &max_itens, &bag_size);
+
+    while (fscanf(file, "%d %d", &weight, &benefit) > 0) {
+        itens.push_back({weight, benefit});
+    }
+
+    cout << max_itens << endl;
+    cout << bag_size << endl;
+    cout << itens.size() << endl;
+
+    exit(1);
 
     vector <int> chromossome_value;
     Chromossome best_solution;
