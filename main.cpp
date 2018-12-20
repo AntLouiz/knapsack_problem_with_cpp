@@ -6,22 +6,6 @@
 #include <algorithm>
 #include "./chromossome.cpp"
 
-#ifndef POPULATION_SIZE
-    #define POPULATION_SIZE 100
-#endif
-
-#ifndef SELECTION_PERCENT
-    #define SELECTION_PERCENT 10
-#endif
-
-#ifndef MAX_ITERATIONS
-    #define MAX_ITERATIONS 100
-#endif
-
-#ifndef MUTATION_PERCENT
-    #define MUTATION_PERCENT 0.5
-#endif
-
 using namespace std;
 
 vector<int> generate_random_values(int max_itens) {
@@ -106,7 +90,7 @@ Chromossome roulette_selection(vector<Chromossome*> &population) {
         random_number -= population_fitness[selected_position - 1];
     }
 
-    return *population[selected_position - 1];
+    return *population[selected_position];
 }
 
 
@@ -125,7 +109,8 @@ vector<Chromossome> crossover(
     Chromossome x,
     Chromossome y,
     vector<vector<int>> itens,
-    int bag_size) {
+    int bag_size,
+    float mutation_percent) {
     // Make the crossover of two Chromossomes and returns they sons in a vector
 
     vector<int> son1_value;
@@ -154,8 +139,8 @@ vector<Chromossome> crossover(
     son1 = Chromossome(son1_value, bag_size, itens);
     son2 = Chromossome(son2_value, bag_size, itens);
 
-    son1.mutate(MUTATION_PERCENT);
-    son2.mutate(MUTATION_PERCENT);
+    son1.mutate(mutation_percent);
+    son2.mutate(mutation_percent);
 
     sons.push_back(son1);
     sons.push_back(son2);
@@ -169,9 +154,6 @@ void refresh_population(
     vector<Chromossome> new_population,
     vector<vector<int>> itens,
     int bag_size){
-    for (int i = 0; i< population.size();i++) {
-         delete (population[i]);
-    }
 
     population.clear();
 
@@ -190,6 +172,19 @@ void refresh_population(
 int main(int argc, char const *argv[])
 {
     srand((unsigned)time(NULL));
+
+    int population_size;
+    population_size = atoi(argv[2]);
+
+    int selection_percent;
+    selection_percent = atoi(argv[3]);
+    
+    float mutation_percent;
+    mutation_percent = atoi(argv[4]);
+    
+    int max_iterations;
+    max_iterations = atoi(argv[5]);
+
 
     vector <Chromossome*> population;
     vector <Chromossome> bests_by_elitism;
@@ -220,22 +215,22 @@ int main(int argc, char const *argv[])
 
     cout << "Generating a initial valid population..." << endl;
 
-    while(population.size() < POPULATION_SIZE) {
+    while(population.size() < population_size) {
         chromossome_value = generate_random_values(max_itens);
         population.push_back(new Chromossome(chromossome_value, bag_size, itens));
     }
 
-    while(generation <= MAX_ITERATIONS) {
+    while(generation <= max_iterations) {
         new_population = {};
         roulette_selected_population = {};
-        elitism_selecteds_size = ((int) (POPULATION_SIZE * SELECTION_PERCENT) / 100);
+        elitism_selecteds_size = ((int) (population_size * selection_percent) / 100);
         bests_by_elitism = get_bests_by_elitism(population, elitism_selecteds_size);
 
         // Adding the bests chooses of elitism to the new population
         for (int i = 0; i < bests_by_elitism.size(); ++i)
             new_population.push_back(bests_by_elitism[i]);
 
-        for (int i = 0; i < (POPULATION_SIZE - elitism_selecteds_size); ++i)
+        for (int i = 0; i < (population_size - elitism_selecteds_size); ++i)
         {
             roulette_selected_population.push_back(
                 roulette_selection(population)
@@ -278,7 +273,8 @@ int main(int argc, char const *argv[])
                 roulette_selected_x[i],
                 roulette_selected_y[i],
                 itens,
-                bag_size
+                bag_size,
+                mutation_percent
             );
 
             new_population.push_back(sons[0]);
