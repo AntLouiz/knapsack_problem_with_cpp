@@ -20,6 +20,7 @@ class Chromossome
             vector<vector<int>> itens = {}
         );
         int get_fitness();
+        void mutate(float mutation_percent);
         void show_fitness();
         void show_value();
 };

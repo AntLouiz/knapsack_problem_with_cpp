@@ -7,7 +7,7 @@
 #include "./chromossome.cpp"
 
 #ifndef POPULATION_SIZE
-    #define POPULATION_SIZE 100
+    #define POPULATION_SIZE 200
 #endif
 
 #ifndef MAX_ITENS
@@ -24,6 +24,10 @@
 
 #ifndef MAX_ITERATIONS
     #define MAX_ITERATIONS 100
+#endif
+
+#ifndef MUTATION_PERCENT
+    #define MUTATION_PERCENT 0.5
 #endif
 
 using namespace std;
@@ -128,8 +132,11 @@ vector<int> generate_binary_mask() {
 vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> itens) {
     // Make the crossover of two Chromossomes and returns they sons in a vector
 
-    vector<int> son1;
-    vector<int> son2;
+    vector<int> son1_value;
+    vector<int> son2_value;
+
+    Chromossome son1;
+    Chromossome son2;
 
     vector<Chromossome> sons;
 
@@ -140,17 +147,22 @@ vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> 
     for (int i = 0; i < binary_mask.size(); ++i)
     {
         if(binary_mask[i]){
-            son1.push_back(x.value[i]);
-            son2.push_back(y.value[i]);
+            son1_value.push_back(x.value[i]);
+            son2_value.push_back(y.value[i]);
         }
         else {
-            son2.push_back(x.value[i]);
-            son1.push_back(y.value[i]);
+            son2_value.push_back(x.value[i]);
+            son1_value.push_back(y.value[i]);
         }
     }
+    son1 = Chromossome(son1_value, BAG_SIZE, itens);
+    son2 = Chromossome(son2_value, BAG_SIZE, itens);
 
-    sons.push_back(Chromossome(son1, BAG_SIZE, itens));
-    sons.push_back(Chromossome(son2, BAG_SIZE, itens));
+    son1.mutate(MUTATION_PERCENT);
+    son2.mutate(MUTATION_PERCENT);
+
+    sons.push_back(son1);
+    sons.push_back(son2);
 
     return sons;
 }
