@@ -152,6 +152,28 @@ vector<Chromossome> crossover(Chromossome x, Chromossome y, vector<vector<int>> 
 }
 
 
+void refresh_population(
+    vector<Chromossome*> &population,
+    vector<Chromossome> new_population,
+    vector<vector<int>> itens){
+    for (int i = 0; i< population.size();i++) {
+         delete (population[i]);
+    }
+
+    population.clear();
+
+    for (int i = 0; i < new_population.size(); i++)
+    {
+        Chromossome* new_chromossome = new Chromossome(
+            new_population[i].value,
+            BAG_SIZE,
+            itens
+        );
+        population.push_back(new_chromossome);
+    }
+}
+
+
 int main(int argc, char const *argv[])
 {
     srand((unsigned)time(NULL));
@@ -253,6 +275,9 @@ int main(int argc, char const *argv[])
         new_population.push_back(separated_chromossome[0]);
 
     best_solution = get_best(new_population);
+
+
+    refresh_population(population, new_population, itens);
 
     best_solution.show_fitness();
 
